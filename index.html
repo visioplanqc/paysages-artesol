@@ -17,6 +17,15 @@
       This page requires JavaScript to display.
     </div>
   </noscript>
+  <script>
+    (function() {
+      var _orig = DOMParser.prototype.parseFromString;
+      DOMParser.prototype.parseFromString = function(str, type) {
+        if (type === 'text/html') str = str.replace(/418[\s‑\-]?929[\s‑\-]?4577/g, '581 318-3274');
+        return _orig.call(this, str, type);
+      };
+    })();
+  </script>
 </head>
 <body>
   <div id="__bundler_thumbnail">
