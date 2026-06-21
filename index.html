@@ -22,10 +22,41 @@
       var _orig = DOMParser.prototype.parseFromString;
       DOMParser.prototype.parseFromString = function(str, type) {
         if (type === 'text/html') {
-          var link = '<div id="__privacy_link" style="position:fixed;bottom:16px;right:20px;z-index:99999;font:13px/1 -apple-system,BlinkMacSystemFont,sans-serif;background:rgba(29,52,37,0.85);padding:8px 14px;border-radius:8px;">'
+          var extras = '<div id="__privacy_link" style="position:fixed;bottom:16px;right:20px;z-index:99999;font:13px/1 -apple-system,BlinkMacSystemFont,sans-serif;background:rgba(29,52,37,0.85);padding:8px 14px;border-radius:8px;">'
             + '<a href="politique-de-confidentialite.html" style="color:#BCCCB7;text-decoration:none;">'
-            + 'Politique de confidentialité</a></div>';
-          str = str.replace(/<\/body>/i, link + '</body>');
+            + 'Politique de confidentialité</a></div>'
+            + '<script>(function(){'
+            + 'function patchPhone(){'
+            +   'var found=false;'
+            +   'var walker=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT);'
+            +   'var node;'
+            +   'while(node=walker.nextNode()){'
+            +     'if(/418[\\s\\u00a0\\-]?929[\\s\\u00a0\\-]?4577/.test(node.nodeValue)){'
+            +       'node.nodeValue=node.nodeValue.replace(/418[\\s\\u00a0\\-]?929[\\s\\u00a0\\-]?4577/g,"581 318-3274");'
+            +       'found=true;'
+            +     '}'
+            +   '}'
+            +   'return found;'
+            + '}'
+            + 'window.addEventListener("load",function(){'
+            +   'if(!patchPhone()){'
+            +     'var el=document.getElementById("__phone_patch");'
+            +     'if(!el){'
+            +       'el=document.createElement("div");'
+            +       'el.id="__phone_patch";'
+            +       'el.style.cssText="position:fixed;bottom:120px;left:50%;transform:translateX(-50%);z-index:99998;background:#1D3425;color:#BCCCB7;font:15px/1 -apple-system,BlinkMacSystemFont,sans-serif;padding:6px 16px;border-radius:6px;letter-spacing:0.03em;cursor:move;";'
+            +       'el.textContent="581 318-3274";'
+            +       'el.title="Faites glisser pour repositionner";'
+            +       'var drag=false,ox=0,oy=0;'
+            +       'el.addEventListener("mousedown",function(e){drag=true;ox=e.clientX-el.getBoundingClientRect().left;oy=e.clientY-el.getBoundingClientRect().top;e.preventDefault();});'
+            +       'document.addEventListener("mousemove",function(e){if(drag){el.style.left=e.clientX-ox+"px";el.style.top=e.clientY-oy+"px";el.style.transform="none";el.style.bottom="auto";}});'
+            +       'document.addEventListener("mouseup",function(){drag=false;});'
+            +       'document.body.appendChild(el);'
+            +     '}'
+            +   '}'
+            + '});'
+            + '})()\x3c/script>';
+          str = str.replace(/<\/body>/i, extras + '</body>');
         }
         return _orig.call(this, str, type);
       };
