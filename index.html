@@ -22,47 +22,9 @@
       var _orig = DOMParser.prototype.parseFromString;
       DOMParser.prototype.parseFromString = function(str, type) {
         if (type === 'text/html') {
-          var extras = '<div id="__privacy_link" style="position:fixed;bottom:16px;right:20px;z-index:99999;font:13px/1 -apple-system,BlinkMacSystemFont,sans-serif;background:rgba(29,52,37,0.85);padding:8px 14px;border-radius:8px;">'
-            + '<a href="politique-de-confidentialite.html" style="color:#BCCCB7;text-decoration:none;">'
-            + 'Politique de confidentialité</a></div>'
-            + '<script>(function(){'
-            + 'function patchPhone(){'
-            +   'var walker=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT);'
-            +   'var node;'
-            +   'while(node=walker.nextNode()){'
-            +     'if(/418[\\s\\u00a0\\u202f\\-]?929[\\s\\u00a0\\u202f\\-]?4577/.test(node.nodeValue)){'
-            +       'node.nodeValue=node.nodeValue.replace(/418[\\s\\u00a0\\u202f\\-]?929[\\s\\u00a0\\u202f\\-]?4577/g,"581 318-3274");'
-            +       'return true;'
-            +     '}'
-            +   '}'
-            +   'return false;'
-            + '}'
-            + 'function findTextNode(str){'
-            +   'var walker=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT);'
-            +   'var node;'
-            +   'while(node=walker.nextNode()){if(node.nodeValue.indexOf(str)>-1)return node;}'
-            +   'return null;'
-            + '}'
-            + 'window.addEventListener("load",function(){'
-            +   'if(!patchPhone()){'
-            +     'var anchor=findTextNode("artesol.ca")||findTextNode("Sainte-Brigitte")||findTextNode("Brigitte");'
-            +     'var el=document.createElement("div");'
-            +     'el.id="__phone_patch";'
-            +     'el.style.cssText="position:absolute;z-index:99998;background:#1D3425;color:rgba(255,255,255,0.65);font:300 17px/1 Georgia,serif;letter-spacing:0.04em;pointer-events:none;white-space:nowrap;";'
-            +     'el.textContent="581 318-3274";'
-            +     'if(anchor){'
-            +       'var rect=anchor.parentElement.getBoundingClientRect();'
-            +       'var scrollY=window.scrollY||document.documentElement.scrollTop;'
-            +       'el.style.left=(rect.left+32)+"px";'
-            +       'el.style.top=(rect.top+scrollY-68)+"px";'
-            +     '}else{'
-            +       'el.style.cssText+="position:fixed;bottom:160px;left:215px;";'
-            +     '}'
-            +     'document.body.appendChild(el);'
-            +   '}'
-            + '});'
-            + '})()\x3c/script>';
-          str = str.replace(/<\/body>/i, extras + '</body>');
+          str = str.replace('418 929 4577', '581 318-3274');
+          var privacyBtn = '<div style="position:fixed;bottom:16px;right:20px;z-index:99999;font:13px/1 -apple-system,BlinkMacSystemFont,sans-serif;background:rgba(29,52,37,0.90);padding:8px 14px;border-radius:8px;"><a href="politique-de-confidentialite.html" style="color:#BCCCB7;text-decoration:none;">Politique de confidentialité</a></div>';
+          str = str.replace(/<\/body>/i, privacyBtn + '</body>');
         }
         return _orig.call(this, str, type);
       };
