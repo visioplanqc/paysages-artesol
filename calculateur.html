@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Calculateur de soumission — Paysages ArtéSol</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --green: #1D3425;
+      --sage: #BCCCB7;
+      --bg: #faf9f5;
+      --bg2: #f0efe9;
+      --text: #2a2a2a;
+      --muted: #777;
+      --border: rgba(0,0,0,0.09);
+      --red: #c0392b;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    nav {
+      background: var(--green);
+      padding: 0 24px;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .nav-logo { font-size: 1rem; font-weight: 700; color: #fff; text-decoration: none; }
+    .nav-back { font-size: 0.82rem; color: var(--sage); text-decoration: none; }
+    .nav-back:hover { text-decoration: underline; }
+
+    .container {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 48px 24px 80px;
+    }
+
+    .page-header {
+      margin-bottom: 36px;
+    }
+    .page-header h1 {
+      font-size: 1.7rem;
+      font-weight: 700;
+      color: var(--green);
+      margin-bottom: 6px;
+    }
+    .page-header p {
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+
+    .card {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      margin-bottom: 24px;
+    }
+
+    .card-header {
+      background: var(--green);
+      padding: 14px 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .card-header h2 {
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--sage);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    thead th {
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--muted);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 10px 20px;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+      background: var(--bg2);
+    }
+    thead th:last-child { text-align: right; }
+    thead th:nth-child(2), thead th:nth-child(3) { text-align: center; }
+
+    tbody tr {
+      border-bottom: 1px solid var(--border);
+      transition: background .1s;
+    }
+    tbody tr:last-child { border-bottom: none; }
+    tbody tr:hover { background: #faf9f5; }
+
+    td {
+      padding: 13px 20px;
+      font-size: 0.9rem;
+    }
+    td:nth-child(2) { text-align: center; color: var(--muted); font-size: 0.85rem; }
+    td:last-child { text-align: right; font-weight: 600; color: var(--green); font-size: 0.9rem; min-width: 110px; }
+
+    .item-name { font-weight: 500; }
+    .unit-label { font-size: 0.75rem; color: var(--muted); }
+
+    .qty-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+    input[type="number"] {
+      width: 90px;
+      padding: 6px 10px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      font-size: 0.9rem;
+      font-family: inherit;
+      background: var(--bg);
+      color: var(--text);
+      text-align: center;
+      outline: none;
+      transition: border-color .15s;
+    }
+    input[type="number"]:focus {
+      border-color: var(--green);
+      background: #fff;
+    }
+    input[type="number"]::-webkit-inner-spin-button { opacity: 0.4; }
+
+    .total-row {
+      background: var(--green);
+      padding: 20px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .total-label {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--sage);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+    .total-amount {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: -0.01em;
+    }
+
+    .actions {
+      display: flex;
+      gap: 12px;
+      margin-top: 20px;
+      flex-wrap: wrap;
+    }
+    button {
+      font-family: inherit;
+      font-size: 0.85rem;
+      font-weight: 600;
+      padding: 10px 22px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      transition: opacity .15s;
+    }
+    button:hover { opacity: 0.85; }
+    .btn-primary { background: var(--green); color: #fff; }
+    .btn-ghost { background: transparent; color: var(--green); border: 1px solid var(--green); }
+
+    .disclaimer {
+      margin-top: 28px;
+      font-size: 0.78rem;
+      color: var(--muted);
+      line-height: 1.6;
+      border-top: 1px solid var(--border);
+      padding-top: 20px;
+    }
+
+    @media print {
+      nav, .actions { display: none; }
+      body { background: #fff; }
+      .card { box-shadow: none; border: 1px solid #ddd; }
+    }
+
+    @media (max-width: 600px) {
+      td { padding: 11px 12px; }
+      thead th { padding: 8px 12px; }
+      input[type="number"] { width: 72px; }
+      .total-amount { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">Paysages ArtéSol</a>
+  <a href="index.html" class="nav-back">← Retour au site</a>
+</nav>
+
+<div class="container">
+  <div class="page-header">
+    <h1>Calculateur de soumission</h1>
+    <p>Entrez les quantités pour obtenir une estimation instantanée.</p>
+  </div>
+
+  <div class="card">
+    <div class="card-header"><h2>Maçonnerie & Surfaces</h2></div>
+    <table>
+      <thead>
+        <tr>
+          <th>Service</th>
+          <th>Prix unitaire</th>
+          <th>Quantité</th>
+          <th>Sous-total</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><div class="item-name">Murs</div><div class="unit-label">pi²</div></td>
+          <td>90 $ / pi²</td>
+          <td><div class="qty-wrap"><input type="number" min="0" step="1" value="" placeholder="0" data-rate="90" oninput="calc()" /></div></td>
+          <td class="line-total">—</td>
+        </tr>
+        <tr>
+          <td><div class="item-name">Pavé-uni</div><div class="unit-label">pi²</div></td>
+          <td>40 $ / pi²</td>
+          <td><div class="qty-wrap"><input type="number" min="0" step="1" value="" placeholder="0" data-rate="40" oninput="calc()" /></div></td>
+          <td class="line-total">—</td>
+        </tr>
+        <tr>
+          <td><div class="item-name">Dalles</div><div class="unit-label">pi²</div></td>
+          <td>35 $ / pi²</td>
+          <td><div class="qty-wrap"><input type="number" min="0" step="1" value="" placeholder="0" data-rate="35" oninput="calc()" /></div></td>
+          <td class="line-total">—</td>
+        </tr>
+        <tr>
+          <td><div class="item-name">Couronnement</div><div class="unit-label">pi lin.</div></td>
+          <td>75 $ / pi lin.</td>
+          <td><div class="qty-wrap"><input type="number" min="0" step="1" value="" placeholder="0" data-rate="75" oninput="calc()" /></div></td>
+          <td class="line-total">—</td>
+        </tr>
+        <tr>
+          <td><div class="item-name">Pierre de rivière</div><div class="unit-label">pi²</div></td>
+          <td>6 $ / pi²</td>
+          <td><div class="qty-wrap"><input type="number" min="0" step="1" value="" placeholder="0" data-rate="6" oninput="calc()" /></div></td>
+          <td class="line-total">—</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <div class="card-header"><h2>Terrassement & Végétation</h2></div>
+    <table>
+      <thead>
+        <tr>
+          <th>Service</th>
+          <th>Prix unitaire</th>
+          <th>Quantité</th>
+          <th>Sous-total</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><div class="item-name">Excavation légère</div><div class="unit-label">pi²</div></td>
+          <td>7 $ / pi²</td>
+          <td><div class="qty-wrap"><input type="number" min="0" step="1" value="" placeholder="0" data-rate="7" oninput="calc()" /></div></td>
+          <td class="line-total">—</td>
+        </tr>
+        <tr>
+          <td><div class="item-name">Excavation profonde</div><div class="unit-label">pi²</div></td>
+          <td>12 $ / pi²</td>
+          <td><div class="qty-wrap"><input type="number" min="0" step="1" value="" placeholder="0" data-rate="12" oninput="calc()" /></div></td>
+          <td class="line-total">—</td>
+        </tr>
+        <tr>
+          <td><div class="item-name">Pelouse</div><div class="unit-label">pi²</div></td>
+          <td>4 $ / pi²</td>
+          <td><div class="qty-wrap"><input type="number" min="0" step="1" value="" placeholder="0" data-rate="4" oninput="calc()" /></div></td>
+          <td class="line-total">—</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <div class="card-header"><h2>Clôtures & Bois</h2></div>
+    <table>
+      <thead>
+        <tr>
+          <th>Service</th>
+          <th>Prix unitaire</th>
+          <th>Quantité</th>
+          <th>Sous-total</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><div class="item-name">Cèdre</div><div class="unit-label">pi lin.</div></td>
+          <td>50 $ / pi lin.</td>
+          <td><div class="qty-wrap"><input type="number" min="0" step="1" value="" placeholder="0" data-rate="50" oninput="calc()" /></div></td>
+          <td class="line-total">—</td>
+        </tr>
+        <tr>
+          <td><div class="item-name">Clôture</div><div class="unit-label">pi lin.</div></td>
+          <td>45 $ / pi lin.</td>
+          <td><div class="qty-wrap"><input type="number" min="0" step="1" value="" placeholder="0" data-rate="45" oninput="calc()" /></div></td>
+          <td class="line-total">—</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <div class="total-row">
+      <span class="total-label">Total estimé</span>
+      <span class="total-amount" id="grand-total">0,00 $</span>
+    </div>
+  </div>
+
+  <div class="actions">
+    <button class="btn-primary" onclick="window.print()">Imprimer / Sauvegarder PDF</button>
+    <button class="btn-ghost" onclick="resetAll()">Réinitialiser</button>
+  </div>
+
+  <p class="disclaimer">
+    Cette estimation est fournie à titre indicatif seulement. Les prix finaux peuvent varier selon les conditions du terrain, l'accessibilité, les matériaux choisis et d'autres facteurs propres à chaque projet. Contactez-nous au <strong>581 318-3274</strong> pour une soumission officielle sans engagement.
+  </p>
+</div>
+
+<script>
+  function fmt(n) {
+    return n.toLocaleString('fr-CA', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' $';
+  }
+
+  function calc() {
+    var inputs = document.querySelectorAll('input[data-rate]');
+    var grand = 0;
+    inputs.forEach(function(inp) {
+      var qty = parseFloat(inp.value) || 0;
+      var rate = parseFloat(inp.dataset.rate);
+      var total = qty * rate;
+      grand += total;
+      var cell = inp.closest('tr').querySelector('.line-total');
+      cell.textContent = qty > 0 ? fmt(total) : '—';
+    });
+    document.getElementById('grand-total').textContent = fmt(grand);
+  }
+
+  function resetAll() {
+    document.querySelectorAll('input[data-rate]').forEach(function(inp) { inp.value = ''; });
+    document.querySelectorAll('.line-total').forEach(function(td) { td.textContent = '—'; });
+    document.getElementById('grand-total').textContent = '0,00 $';
+  }
+</script>
+
+</body>
+</html>
